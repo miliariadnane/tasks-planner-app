@@ -16,9 +16,9 @@
 # Overview
 
 - This project is a web app developed with spring Boot (backend) & Angular (frontend).
-- The idea behind this project is to create an app that allows to plan and manage the tasks of a developers teams.
-- Once a team member has created the task, the application notifies team members that a new task was created using Discord Webhooks.
-- The workflow is managed by Git Actions  CI/CD in order to automate deployment into AWS (AWS Elastic Beanstalk & AWS RDS).
+- Tasks planner allows planning and managing your tasks with the team and get notifications through discord.
+- Once the task is created by the super admin (project manager), the application notifies affected users that a new task has been created using Discord Webhooks.
+- The workflow is managed by Git Actions  CI/CD in order to automate deployment into AWS (AWS Elastic Beanstalk, RDS and AWS S3).
 - [new feature upcoming](#upcoming-features)
 
 # Application live
