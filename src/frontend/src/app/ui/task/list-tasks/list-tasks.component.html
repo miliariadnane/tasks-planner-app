@@ -1,0 +1,341 @@
+<!-- <div>{{ appState$ | async | json }}</div> -->
+
+<div class="page-content container task-has-grid">
+    <ul class="nav nav-pills p-3 bg-white mb-3 rounded-pill align-items-center">
+        <li class="nav-item pointer">
+            <a class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" 
+            [class.active]="(filteredType$ | async) === Type.ALL">
+                <span (click)="filterTasks(Type.ALL)" class="d-none d-md-block">All Tasks</span>
+            </a>
+        </li>
+        <li class="nav-item pointer">
+            <a (click)="filterTasks(Type.BUG)" class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2"
+            [class.active]="(filteredType$ | async) === Type.BUG">
+              <span class="d-none d-md-block">
+                Bug <i class="point fa fa-circle ml-1 font-10" style="color: #ff505080;"></i>
+              </span></a>
+        </li>
+        <li class="nav-item pointer">
+            <a (click)="filterTasks(Type.IMPROVEMENT)" class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2"
+            [class.active]="(filteredType$ | async) === Type.IMPROVEMENT"> 
+              <span class="d-none d-md-block">
+                Improvement <i class="point fa fa-circle ml-1 font-10" style="color: #2cabe380;"></i>
+              </span></a>
+        </li>
+        <li class="nav-item pointer">
+            <a (click)="filterTasks(Type.FEATURE)" class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" 
+            [class.active]="(filteredType$ | async) === Type.FEATURE">
+               <span class="d-none d-md-block">
+                 Feature <i class="point fa fa-circle ml-1 font-10" style="color: #2cd07e80;"></i>
+                </span></a>
+        </li>
+        <li class="nav-item pointer">
+            <a (click)="filterTasks(Type.TEST)" class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" 
+            [class.active]="(filteredType$ | async) === Type.TEST">
+               <span class="d-none d-md-block">
+                 Test <i class="point fa fa-circle ml-1 font-10" style="color: #ffc107;"></i>
+                </span></a>
+        </li>
+        <li class="nav-item pointer">
+            <a (click)="filterTasks(Type.DOCUMENTATION)" class="pointer nav-link rounded-pill task-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" 
+            [class.active]="(filteredType$ | async) === Type.DOCUMENTATION">
+               <span class="d-none d-md-block">
+                 Documentation <i class="point fa fa-circle ml-1 font-10" style="color: #361a0a;"></i>
+                </span></a>
+        </li>
+        <li class="nav-item ml-auto pointer" [hidden]="!isAdminOrSuperAdmin">
+            <a class="pointer nav-link btn-primary rounded-pill d-flex align-items-center px-3" data-toggle="modal" data-target="#newTask"> 
+            <span class="d-none d-md-block font-14" style="color: white;">Add Task</span></a>
+        </li>
+    </ul>
+    <div class="tab-content bg-transparent">
+        <div id="task-full-container" class="task-has-grid row">
+            <ng-container *ngIf="(appState$ | async) as result" [ngSwitch]="result.dataState">
+                <ng-container *ngSwitchCase="DataState.LOADING">
+                <div  class="col-md-12 single-task-item text-center">
+                    <div class="spinner-border text-info" role="status"></div>
+                </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="DataState.ERROR">
+                <div class="alert-danger">
+                    {{ result.error }}
+                </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="DataState.LOADED">
+                    <div *ngFor="let task of result?.data?.tasks" class="col-md-4 single-task-item" 
+                    [ngClass]="[task.type === Type.BUG ? 'task-bug' : '',
+                                task.type === Type.IMPROVEMENT ? 'task-improv' : '',
+                                task.type === Type.TEST ? 'task-test' : '',
+                                task.type === Type.FEATURE ? 'task-feature' : '',
+                                task.type === Type.DOCUMENTATION ? 'task-cap' : '']">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col-10">
+                                    <span class="side-stick"></span>
+                                    <h5 class="task-title text-truncate w-75 mb-0">
+                                    {{ task.title }}  <i class="point fa fa-circle ml-1 font-10"></i></h5>
+                                </div>
+                                <div class="col-2">
+                                    <span *ngIf="task.type == Type.BUG">🐞</span>
+                                    <span *ngIf="task.type == Type.IMPROVEMENT">🌱</span>
+                                    <span *ngIf="task.type == Type.FEATURE">✨</span>
+                                    <span *ngIf="task.type == Type.DOCUMENTATION">📝</span>
+                                    <span *ngIf="task.type == Type.TEST">🔎</span>
+                                </div>
+                            </div>
+                            <p class="task-date font-12 text-muted">Since {{ task.createdAt | date: 'MMMM d, y, h:mm a' }}</p>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="task-priority float-left">
+                                        <span *ngIf="task.priority == Priority.LOW" class="badge badge-outline badge-sm badge-dark badge-pill float-right text-white">Low</span>
+                                        <span *ngIf="task.priority == Priority.MEDIUM" class="badge badge-outline badge-sm badge-dark badge-pill float-right text-white">Medium</span>
+                                        <span *ngIf="task.priority == Priority.HIGH" class="badge badge-outline badge-sm badge-dark badge-pill float-right text-white">High</span>
+                                    </div>
+                                </div>
+                                <div class="col-8 my-auto">
+                                    <span class="badge badge-outline badge-sm badge-info badge-pill float-right"><i class="fa fa-calendar-alt mr-2"></i>{{ task.startDate | date: 'shortDate' }} To {{ task.endDate | date: 'shortDate' }}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <span [hidden]="!isSuperAdmin" (click)="deleteTask(task.id)" class="mr-1 pointer">
+                                    <i class="fa fa-trash remove-task">
+                                    </i></span>
+                                <div class="ml-auto">
+                                    <div class="category-selector btn-group">
+                                        <a [hidden]="!isAdminOrSuperAdmin" (click)="selectTask(task)" class="pointer nav-link label-group p-0" role="button" aria-haspopup="true" aria-expanded="true">
+                                            <span class="mr-1"><i class="fa fa-edit remove-task"></i></span>
+                                        </a>
+                                    </div>
+                                    <div class="category-selector btn-group">
+                                        <a [routerLink]="[task.id, 'show']" class="pointer nav-link label-group p-0" role="button" aria-haspopup="true" aria-expanded="true">
+                                            <span class="mr-1"><i class="fa fa-eye"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+  
+    <!-- Modal Add task -->
+    <div [hidden]="!isAdminOrSuperAdmin" class="modal fade" id="newTask" tabindex="-1" role="dialog" aria-labelledby="addtasksmodalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title text-white">Add a Task</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="tasks-box">
+                        <div class="tasks-content">
+                            <form #taskForm="ngForm" (ngSubmit)="saveTask(taskForm)">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                    <div class="task-title">
+                                        <label>Task Title<span class="text-danger">*</span></label>
+                                        <input name="title" ngModel required type="text" class="form-control" minlength="5" maxlength="255" placeholder="Title" />
+                                    </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label>Type<span class="text-danger">*</span></label>
+                                    <select class="custom-select" ngModel="TEST" required name="type">
+                                        <option [value]="Type.IMPROVEMENT">Improvement</option>
+                                        <option [value]="Type.BUG">Bug</option>
+                                        <option [value]="Type.DOCUMENTATION">Documenatation</option>
+                                        <option [value]="Type.FEATURE">Feature</option>
+                                        <option [value]="Type.TEST">Test</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label>Priority<span class="text-danger">*</span></label>
+                                    <select class="custom-select" ngModel="LOW" required name="priority">
+                                        <option [value]="Priority.LOW">Low</option>
+                                        <option [value]="Priority.MEDIUM">Medium</option>
+                                        <option [value]="Priority.HIGH">High</option>
+                                    </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mt-1">
+                                        <label>Status<span class="text-danger">*</span></label>
+                                        <select class="custom-select" ngModel="NOT_STARTED" required name="status">
+                                            <option [value]="Status.NOT_STARTED">Not Started</option>
+                                            <option [value]="Status.IN_PROGRESS">In progress</option>
+                                            <option [value]="Status.DONE">Done</option>
+                                            <option [value]="Status.CLOSED">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-1">
+                                        <label>Affected Users<span class="text-danger">*</span></label>
+                                        <!-- <ng-multiselect-dropdown #multiSelect
+                                            ngModel
+                                            name="users"
+                                            [placeholder]="'List of Users'"
+                                            [settings]="dropdownSettings"
+                                            [data]="usersList"
+                                            (onSelect)="onSelectUsers($event)"
+                                            (onDeSelect)="onDeSelectUsers($event)"
+                                            (onDeSelectAll)="onDeSelectAllUsers()"
+                                            (onSelectAll)="onSelectAllUsers($event)"
+                                            >
+                                        </ng-multiselect-dropdown> -->
+                                        <select class="custom-select" name="users" ngModel multiple>
+                                            <option *ngFor="let user of users" [value]="user">
+                                                {{user.lastName.toUpperCase()}} {{user.firstName}} - {{user.job}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-1">
+                                    <div class="form-group">
+                                        <label>Start date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="startDate" ngModel required>
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="col-md-6 mt-1">
+                                    <div class="form-group">
+                                        <label>End date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="endDate" ngModel required>
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="task-details">
+                                        <label>Task Details</label>
+                                        <angular-editor name="details" ngModel required [config]="editorConfig"></angular-editor>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" id="closeModal" data-dismiss="modal">Discard</button>
+                                    <button type="submit" [disabled]="taskForm.invalid || (isLoading$ | async)" class="btn btn-info">
+                                        <i *ngIf="isLoading$ | async" class="fas fa-spinner fa-spin"></i>
+                                        <span *ngIf="isLoading$ | async">Saving...</span>
+                                        <span *ngIf="!(isLoading$ | async)">Save</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a id="editTaskButton" data-toggle="modal" data-target="#editTask"> 
+    </a>
+
+    <!-- Modal edit task -->
+    <div [hidden]="!isAdminOrSuperAdmin" class="modal fade" id="editTask" tabindex="-1" role="dialog" aria-labelledby="edittasksmodalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content border-0">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title text-white">Edit Task</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="tasks-box">
+                        <div class="tasks-content">
+                            <form #editTaskForm="ngForm" 
+                                (ngSubmit)="updateTask(editTaskForm.value)"
+                                *ngIf="(selectedTask$ | async) as selectedTask">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                    <div class="task-title">
+                                        <label>Task Title<span class="text-danger">*</span></label>
+                                        <input type="hidden" ngModel="{{ selectedTask.id }}" name="id" id="id">
+                                        <input name="title" ngModel="{{ selectedTask.title }}" required type="text" class="form-control" minlength="5" maxlength="255" placeholder="Title" />
+                                    </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label>Type<span class="text-danger">*</span></label>
+                                    <select class="custom-select" ngModel="{{ selectedTask.type }}" required name="type">
+                                        <option [value]="Type.IMPROVEMENT">Improvement</option>
+                                        <option [value]="Type.BUG">Bug</option>
+                                        <option [value]="Type.DOCUMENTATION">Documenatation</option>
+                                        <option [value]="Type.FEATURE">Feature</option>
+                                        <option [value]="Type.TEST">Test</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label>Priority<span class="text-danger">*</span></label>
+                                    <select class="custom-select" ngModel="{{ selectedTask.priority }}" required name="priority">
+                                        <option [value]="Priority.LOW">Low</option>
+                                        <option [value]="Priority.MEDIUM">Medium</option>
+                                        <option [value]="Priority.HIGH">High</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Status<span class="text-danger">*</span></label>
+                                        <select class="custom-select" ngModel="{{ selectedTask.status }}" required name="status">
+                                            <option [value]="Status.NOT_STARTED">Not Started</option>
+                                            <option [value]="Status.IN_PROGRESS">In progress</option>
+                                            <option [value]="Status.DONE">Done</option>
+                                            <option [value]="Status.CLOSED">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Affected Users<span class="text-danger">*</span></label>
+                                        <!-- <ng-multiselect-dropdown
+                                            #multiSelect
+                                            [(ngModel)]="selectedTask.users"
+                                            name="users"
+                                            [placeholder]="'List of Users'"
+                                            [settings]="dropdownSettings"
+                                            [data]="usersList"
+                                            (onSelect)="onSelectUsers($event)"
+                                            (onDeSelect)="onDeSelectUsers($event)"
+                                            (onDeSelectAll)="onDeSelectAllUsers()"
+                                            (onSelectAll)="onSelectAllUsers($event)"
+                                            >
+                                        </ng-multiselect-dropdown> -->
+                                        <select class="custom-select" name="users" [(ngModel)]="selectedTask.users" multiple>
+                                            <option *ngFor="let user of users; let i = index" [value]="user.id">
+                                                {{user.lastName.toUpperCase()}} {{user.firstName}} - {{user.job}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Start date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="startDate" ngModel="{{ selectedTask.startDate }}" required>
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>End date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="endDate" ngModel="{{ selectedTask.endDate }}" required>
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="task-details">
+                                        <label>Task Details</label>
+                                        <angular-editor name="details" ngModel="{{ selectedTask.details }}" required [config]="editorConfig"></angular-editor>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" id="closeModal" data-dismiss="modal">Discard</button>
+                                    <button type="submit" [disabled]="taskForm.invalid || (isLoading$ | async)" class="btn btn-info">
+                                        <i *ngIf="isLoading$ | async" class="fas fa-spinner fa-spin"></i>
+                                        <span *ngIf="isLoading$ | async">Edit...</span>
+                                        <span *ngIf="!(isLoading$ | async)">Edit</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

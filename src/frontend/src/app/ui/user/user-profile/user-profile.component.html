@@ -1,0 +1,213 @@
+<div class="container">
+    <div class="row flex-lg-nowrap">
+        <div class="col-12 col-lg-auto mb-3" style="width: 200px;">
+            <div class="card p-3">
+                <div class="e-navlist e-navlist--active-bg">
+                    <ul class="nav">
+                        <li class="nav-item" [hidden]="!isSuperAdmin">
+                            <a class="nav-link px-2 active" routerLink="/dashboard/monitoring">
+                                <i class="fas fa-chart-line mr-1"></i>
+                                <span>Monitoring</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-2" routerLink="/dashboard/tasks">
+                                <i class="fa fa-fw fa-th mr-1"></i>
+                                <span>Tasks</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-2" routerLink="/dashboard/user/reset-password">
+                                <i class="fa fa-fw fa-cog mr-1"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row">
+            <div class="col mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="e-profile">
+                            <div class="row">
+                                <div class="col-12 col-sm-auto mb-3">
+                                <div class="mx-auto" style="width: 140px;">
+                                    <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px;">
+                                        <img *ngIf="user?.profileImage" class="rounded" height="135" width="135" src="http://tasksplanner-env.eba-pkikrhha.us-east-1.elasticbeanstalk.com/api/v1/image/{{user?.userId}}/download" alt="profile image">
+                                        <img *ngIf="!user?.profileImage" class="rounded" height="135" width="135" src="assets/img/user.gif" alt="profile image">
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                <div class="text-center text-²qsm-left mb-2 mb-sm-0">
+                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{user.lastName.toUpperCase()}} {{user.firstName}}</h4>
+                                    <p class="mb-0">{{user.username}}</p>
+                                    <!-- <div class="text-muted">
+                                        <small>
+                                            <i class="fab fa-discord"></i>
+                                            Discord : {{user?.discordAccount}}
+                                        </small>
+                                    </div> -->
+                                    <div class="mt-2">
+                                    <button class="btn btn-primary" type="button" (click)="onUpdateProfileImage()">
+                                        <i class="fa fa-fw fa-camera"></i>
+                                        <span>Change Photo</span>
+                                    </button>
+                                    </div>
+                                </div>
+                                <div class="text-center text-sm-right">
+                                    <span class="badge badge-secondary">{{user?.role.substring(5).toLowerCase()}}</span>
+                                    <div class="text-muted"><small>Joined {{user.joinDate | date:'mediumDate'}}</small></div>
+                                </div>
+                                </div>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a href="" class="active nav-link">Settings</a></li>
+                            </ul>
+                            <div class="tab-content pt-3">
+                                <div class="tab-pane active">
+                                    <form #profileUserForm="ngForm" (ngSubmit)="updateCurrentUser(profileUserForm.value)" class="form" novalidate>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" name="firstName" required [(ngModel)]="user.firstName"
+                                                    class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" name="lastName" required [(ngModel)]="user.lastName"
+                                                    class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                    <label>Username</label>
+                                                    <input type="text" name="username" required [(ngModel)]="user.username"
+                                                    class="form-control">
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Email</label>
+                                                        <input type="text" name="email" required [(ngModel)]="user.email"
+                                                        class="form-control">
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                        <label>Role</label><small [hidden]="isSuperAdmin">(read only)</small>
+                                                        <select name="role" required [(ngModel)]="user.role" class="form-control">
+                                                            <option [hidden]="!isSuperAdmin" value="ROLE_USER">USER</option>
+                                                            <option [hidden]="!isSuperAdmin" value="ROLE_ADMIN">ADMIN</option>
+                                                            <option [hidden]="!isSuperAdmin" value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>
+                                                        </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mb-3">
+                                                        <div class="form-group">
+                                                        <label>Job</label>
+                                                        <select class="custom-select" [(ngModel)]="user.job" required name="job">
+                                                            <option [value]="Job.BACKEND">Backend</option>
+                                                            <option [value]="Job.FRONTEND">Frontend</option>
+                                                            <option [value]="Job.DEVOPS">Devops</option>
+                                                            <option [value]="Job.NETWORK">Network</option>
+                                                            <option [value]="Job.SECURITY">Security</option>
+                                                            <option [value]="Job.MANAGER">Manager</option>
+                                                        </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                    <div class="form-group">
+                                                        <label>Discord UserID</label>
+                                                        <input type="text" name="discordAccount" required [(ngModel)]="user.discordAccount"
+                                                        class="form-control">
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-6 mb-3">
+                                            <div class="mb-2"><b>Account Settings</b></div>
+                                            <div class="row">
+                                                <div class="col">
+                                                <div class="custom-controls-stacked px-2">
+                                                    <div class="custom-control custom-checkbox">
+                                                    <input name="enable" type="checkbox" [(ngModel)]="user.enable" class="custom-control-input" id="enable-input">
+                                                    <label class="custom-control-label" for="enable-input">Enable</label>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-end">
+                                            <button class="btn btn-primary" type="submit">
+                                                <i *ngIf="refreshing" class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;
+                                                <span *ngIf="refreshing">Loading...</span>
+                                                <span *ngIf="!refreshing">Save Changes</span>
+                                            </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3 mb-3">
+                <div class="card mb-3">
+                    <div class="card-body mx-auto">
+                        <div class="px-xl-3">
+                        <button class="btn btn-block btn-secondary" (click)="logOut()">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span>Logout</span>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body mx-auto">
+                        <small class="text-center mb-2">Join Discord Team</small>
+                        <a type="button" class="btn btn-block btn-discord" [href]="discordUrl" target="_blank">
+                            <i class="fab fa-discord mr-1 xxl"></i>
+                            Discord
+                        </a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title font-weight-bold">Permissions From {{user.role.substring(5)}} Role</h6>
+                        <h6 *ngFor="let authority of user?.authorities" class="card-text">{{authority}}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form enctype="multipart/form-data" style="display:none;">
+        <input type="file"
+          (change)="onProfileImageChange($event); updateProfileImage()"
+         name="profile-image-input" id="profile-image-input" placeholder="file" accept="image/*" />
+    </form>
+</div>

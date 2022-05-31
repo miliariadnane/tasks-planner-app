@@ -1,0 +1,8 @@
+export enum Type {
+  ALL = 'ALL',
+  FEATURE = 'FEATURE',
+  BUG = 'BUG',
+  IMPROVEMENT = 'IMPROVEMENT',
+  TEST = 'TEST',
+  DOCUMENTATION = 'DOCUMENTATION'
+}

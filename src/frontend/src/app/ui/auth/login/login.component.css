@@ -1,0 +1,62 @@
+
+.bg-gradient-primary {
+    background-color: #4e73df;
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    background-size: cover;
+    height: 100%;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.bg-login-image {
+    background: url("./../../../../assets/img/tasksplan.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.text-gray-900 {
+    color: #3a3b45 !important;
+}
+
+form.user .form-control-user {
+  font-size: 0.8rem;
+  border-radius: 15rem;
+  padding: 1.5rem 1rem;
+}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 0.35rem;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+  border-color: #4e73df;
+  background-color: #4e73df;
+}
+
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3e%3cpath stroke='%23fff' d='M0 2h4'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+  background-color: rgba(78, 115, 223, 0.5);
+}
+
+.custom-checkbox .custom-control-input:disabled:indeterminate ~ .custom-control-label::before {
+  background-color: rgba(78, 115, 223, 0.5);
+}
+
+form.user .btn-user {
+  font-size: 0.8rem;
+  border-radius: 10rem;
+  padding: 0.75rem 1rem;
+}
+
+.paddingCard {
+  padding: 2rem;
+}

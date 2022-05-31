@@ -1,0 +1,94 @@
+name: Deploy CD
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+  # Postgres
+  POSTGRESQL_DB: tasksplanner
+  POSTGRESQL_USER: postgres
+  POSTGRESQL_PASSWORD: password
+  # DockerHub
+  DOCKER_HUB_USERNAME: miliariadnane
+  # AWS & Elastic Bean Stalk
+  AWS_REGION: us-east-1
+  EB_ENVIRONMENT_NAME: Tasksplanner-env
+  EB_APPLICATION_NAME: tasks-planner
+  EB_DEPLOYMENT_PACKAGE: aws-elasticbeanstalk/docker-compose.yml
+  # AWS Bucket Keys
+  ACCESS_KEY_BUCKET: ${{ secrets.ACCESS_KEY_BUCKET }}
+  SECRET_KEY_BUCKET: ${{ secrets.SECRET_KEY_BUCKET }}
+  # DISCORD WEBHOOK
+  WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+  # TOKEN SECRET - JWT
+  TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13.6
+        env:
+          POSTGRES_DB: ${{ env.POSTGRESQL_DB }}
+          POSTGRES_USER: ${{ env.POSTGRESQL_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRESQL_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+        - uses: actions/checkout@v2
+        - name: Setup Java JDK
+          uses: actions/setup-java@v2
+          with:
+            java-version: '15'
+            distribution: 'adopt'
+            cache: maven
+
+        - name: Generate image number
+          id: image-number
+          run: echo "::set-output name=IMAGE_NUMBER::$(date '+%-d.%-m.%Y.%-H.%-M.%-S')"
+
+        - name: Login to Docker Hub
+          uses: docker/login-action@v1
+          with:
+            username: ${{ env.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+        - name: Maven Clean Package and Push to Dockerhub
+          run: mvn --no-transfer-progress clean package 
+              -P build-frontend 
+              -P jib-push-image-to-dockerhub
+              -Dapp.image.tag=${{steps.image-number.outputs.IMAGE_NUMBER}} 
+              -Dapp.env.var1=${{ env.WEBHOOK_URL }}
+              -Dapp.env.var2=${{ env.ACCESS_KEY_BUCKET }}
+              -Dapp.env.var3=${{ env.SECRET_KEY_BUCKET }}
+              -Dapp.env.var4=${{ env.TOKEN_SECRET }}
+
+        - name: Update and commit app version in docker-compose.yml
+          run: |
+            IMAGE_NUMBER=${{steps.image-number.outputs.IMAGE_NUMBER}}
+            echo -e "Current aws-elasticbeanstalk/docker-compose.yml\n$(cat aws-elasticbeanstalk/docker-compose.yml)"
+            sed -i -E 's_(miliariadnane/tasks-planner:)([^"]*)_\1'${IMAGE_NUMBER}'_' aws-elasticbeanstalk/docker-compose.yml
+            echo -e "Current aws-elasticbeanstalk/docker-compose.yml\n$(cat aws-elasticbeanstalk/docker-compose.yml)"
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add aws-elasticbeanstalk/docker-compose.yml
+            git commit -m "new app version: ${IMAGE_NUMBER}"
+            git push
+
+        - name: Deploy to AWS Elastic Beanstalk
+          uses: einaregilsson/beanstalk-deploy@ebe3476a4ce991d54336935e75e78dd9d86f9408
+          with:
+            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            region: ${{ env.AWS_REGION }}
+            environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
+            application_name: ${{ env.EB_APPLICATION_NAME }}
+            deployment_package: ${{ env.EB_DEPLOYMENT_PACKAGE }}
+            version_label: ${{ steps.image-number.outputs.IMAGE_NUMBER }}
+            version_description: Version ${{steps.image-number.outputs.IMAGE_NUMBER}} deployed via github actions ${{ github.sha }}
+            wait_for_deployment: 60

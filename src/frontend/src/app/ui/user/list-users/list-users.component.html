@@ -1,0 +1,484 @@
+<!-- <div>{{ users | json }}</div> -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card search-form">
+                <div class="card-body p-0">
+                    <form>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row no-gutters">
+                                    <div class="col-lg-11 col-md-11 col-sm-12 p-0">
+                                        <input name="searchTerm"
+                                               #searchInput="ngModel"
+                                               ngModel
+                                               (ngModelChange)="searchUsers(searchInput.value)"
+                                               type="text" 
+                                               placeholder="Search..." 
+                                               class="form-control" >
+                                    </div>
+                                    <div class="col-lg-1 col-md-1 col-sm-12 p-0">
+                                        <button class="btn btn-base" style="cursor: auto;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 card-margin" [hidden]="!isAdminOrSuperAdmin">
+            <div class="card search-form">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row no-gutters">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+                                    <i class="fas fa-plus paddingIcon"></i>
+                                    <span>New User</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1 card-margin">
+            <div class="card search-form">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row no-gutters">
+                                <button type="button" (click)="getUsers(true)" class="btn btn-info">
+                                    <i *ngIf="refreshing" class="fas fa-sync fa-spin paddingIcon"></i>
+                                    <i *ngIf="!refreshing" class="fas fa-sync paddingIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-margin">
+                <div class="card-body">
+                    <div class="row search-body">
+                        <div class="col-lg-12">
+                            <div class="search-result">
+                                <div class="result-header">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <!-- <div class="records">Showing: <b>{{users.length}}</b> results</div> -->
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="result-actions float-right">
+                                                <div class="result-sorting">
+                                                    <span>Sort By:</span>
+                                                    <select class="form-control border-0" id="exampleOption">
+                                                        <option value="1">Relevance</option>
+                                                        <option value="2">Names (A-Z)</option>
+                                                        <option value="3">Names (Z-A)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="result-body">
+                                    <div class="table-responsive">
+                                        <table class="table widget-26">
+                                            <tbody *ngFor="let user of users">
+                                                <tr>
+                                                    <td>
+                                                        <div class="widget-26-job-emp-img">
+                                                            <img *ngIf="!user.profileImage" src="/assets/img/user.png" alt="user-image" />
+                                                            <img *ngIf="user.profileImage" src="http://tasksplanner-env.eba-pkikrhha.us-east-1.elasticbeanstalk.com/api/v1/image/{{user?.userId}}/download" alt="user-image" />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="widget-26-job-title">
+                                                            <a type="button" data-toggle="modal" data-target="#viewUserModal" (click)="onSelectUser(user)">{{user.lastName.toUpperCase()}} {{user.firstName}}</a>
+                                                            <p class="m-0">
+                                                                <span *ngIf="user.role == 'ROLE_SUPER_ADMIN'">
+                                                                    <strong class="employer-name">Super Admin.</strong>
+                                                                </span> 
+                                                                <span *ngIf="user.role == 'ROLE_ADMIN'">
+                                                                    <strong class="employer-name">Admin.</strong>
+                                                                </span> 
+                                                                <span *ngIf="user.role == 'ROLE_USER'">
+                                                                    <strong class="employer-name">User.</strong>
+                                                                </span> 
+                                                                <span class="text-muted time ml-2">Join Date :
+                                                                    <small>{{user.joinDate | date: 'MMMM d, y'}}</small>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="widget-26-job-info">
+                                                            <p class="type m-0">{{user.email}}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="my-auto">
+                                                        <span *ngIf="user.enable == true" class="badge badge-outline badge-sm badge-success badge-pill text-white">Active</span>
+                                                        <span *ngIf="user.enable == false" class="badge badge-outline badge-sm badge-danger badge-pill text-white">Inactive</span>
+                                                    </td>
+                                                    <td>
+                                                        <div *ngIf="user.job == Job.DEVOPS" class="widget-26-job-category bg-soft-base">
+                                                            <i class="indicator bg-primary"></i>
+                                                            <span>Devops</span>
+                                                        </div>
+                                                        <div *ngIf="user.job == Job.BACKEND" class="widget-26-job-category bg-soft-info">
+                                                            <i class="indicator bg-info"></i>
+                                                            <span>Backend</span>
+                                                        </div>
+                                                        <div *ngIf="user.job == Job.FRONTEND" class="widget-26-job-category bg-soft-success">
+                                                            <i class="indicator bg-success"></i>
+                                                            <span>Frontend</span>
+                                                        </div>
+                                                        <div *ngIf="user.job == Job.MANAGER" class="widget-26-job-category bg-soft-danger">
+                                                            <i class="indicator bg-danger"></i>
+                                                            <span>Manager</span>
+                                                        </div>
+                                                        <div *ngIf="user.job == Job.NETWORK" class="widget-26-job-category bg-soft-warning">
+                                                            <i class="indicator bg-warning"></i>
+                                                            <span>Network</span>
+                                                        </div>
+                                                        <div *ngIf="user.job == Job.SECURITY" class="widget-26-job-category bg-soft-warning">
+                                                            <i class="indicator bg-warning"></i>
+                                                            <span>Security</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="category-selector btn-group">
+                                                            <a class="pointer nav-link label-group p-0" 
+                                                               role="button" 
+                                                               (click)="onEditUser(user)"
+                                                               data-toggle="modal" 
+                                                               data-target="#editUserModal"
+                                                               aria-haspopup="true" 
+                                                               aria-expanded="true"
+                                                               >
+                                                                <span class="mr-1">
+                                                                    <i class="fa fa-edit remove-task"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="category-selector btn-group">
+                                                            <a class="pointer nav-link label-group p-0" 
+                                                               role="button" 
+                                                               (click)="deleteUser(user.username)"
+                                                               aria-haspopup="true" 
+                                                               aria-expanded="true"
+                                                               [hidden]="!isSuperAdmin"
+                                                               >
+                                                                <span class="mr-1">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal user info -->
+<div class="modal fade bd-example-modal-lg" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby=""
+aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title text-center" id="exampleModalLongTitle">{{selectedUser?.firstName}}
+                {{selectedUser?.lastName}}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <div>
+                <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                    <div class="col-12 col-sm-auto">
+                        <div class="mx-auto" style="width: 120px;">
+                            <div class="d-flex justify-content-center align-items-center rounded">
+                                <img *ngIf="!selectedUser?.profileImage" 
+                                    class="rounded" 
+                                    height="120" 
+                                    width="120" 
+                                    src="assets/img/user.gif">
+                                <img *ngIf="selectedUser?.profileImage" 
+                                    class="rounded" 
+                                    height="120" width="120" 
+                                    src="http://tasksplanner-env.eba-pkikrhha.us-east-1.elasticbeanstalk.com/api/v1/image/{{user?.userId}}/download">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-flex flex-column flex-sm-row justify-content-between">
+                        <div class="text-center text-sm-left mb-sm-0">
+                        <h6 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{selectedUser?.firstName}}
+                            {{selectedUser?.lastName}}</h6>
+                        <p class="mb-1">username: {{selectedUser?.username}}</p>
+                        <div class="">Job:
+                            <span class="badge badge-info">{{selectedUser?.job}}</span>
+                        </div>
+                        </div>
+                        <div class="text-center text-sm-right">
+                        <div class="text-muted"><small>Joined {{selectedUser?.joinDate | date: 'mediumDate'}}</small></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"></li>
+                    <li class="list-group-item">
+                        <i class="fab fa-discord float-right lg" style="color: #7289DA;">
+                        </i>{{selectedUser?.discordAccount}}
+                    </li>
+                    <li class="list-group-item"><i class="fa fa-envelope float-right"></i>{{selectedUser?.email}}
+                    </li>
+                    <li class="list-group-item"><i class="fas fa-shield-alt float-right"></i>{{selectedUser?.role.substring(5)}}
+                    <li class="list-group-item">
+                    <span [hidden]="selectedUser?.enable">
+                        <i class="fa fa-lock float-right" style="color: red;">
+                        </i>
+                        Account Inactive
+                    </span>
+                    <span [hidden]="!selectedUser?.enable">
+                        <i class="fa fa-unlock float-right" style="color: green;">
+                        </i>
+                        Account Active 
+                    </span>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- add new user modal -->
+<div [hidden]="!isAdminOrSuperAdmin" class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form #newUserForm="ngForm" (ngSubmit)="addNewUser(newUserForm)">
+                <div class="form-group">
+                    <label for="firstName">First Name<span class="text-danger">*</span></label>
+                    <input type="text" name="firstName" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name<span class="text-danger">*</span></label>
+                    <input type="text" name="lastName" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username<span class="text-danger">*</span></label>
+                    <input type="text" name="username" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email<span class="text-danger">*</span></label>
+                    <input type="email" name="email" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password <span class="text-danger">*</span></label>
+                    <input type="password" name="password" required ngModel class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Job<span class="text-danger">*</span></label>
+                    <select class="custom-select" ngModel="BACKEND" required name="job">
+                        <option [value]="Job.BACKEND">Backend</option>
+                        <option [value]="Job.FRONTEND">Frontend</option>
+                        <option [value]="Job.DEVOPS">Devops</option>
+                        <option [value]="Job.NETWORK">Network</option>
+                        <option [value]="Job.SECURITY">Security</option>
+                        <option [value]="Job.MANAGER">Manager</option>
+                    </select>
+                </div>
+                <!-- <div *ngIf="isAdminOrSuperAdmin" class="form-group"> -->
+                <div class="form-group" *ngIf="isAdminOrSuperAdmin">
+                    <label for="authority">Role<span class="text-danger">*</span>
+                    </label>
+                    <select name="role" required ngModel="ROLE_USER" class="form-control">
+                        <option value="ROLE_USER">USER</option>
+                        <option value="ROLE_ADMIN">ADMIN</option>
+                        <option value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>
+                    </select>
+                </div>
+                <div *ngIf="!isAdminOrSuperAdmin" class="form-group">
+                    <label for="authority">Role</label>
+                    <input type="text" name="role" required ngModel="USER" readonly class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="text">Discord UserID 
+                        <a href="https://www.remote.tools/remote-work/how-to-find-discord-id">
+                            <small>(Ex : link)</small>
+                        </a>
+                        <span class="text-danger ml-1">* Required to recieve notification</span>
+                    </label>
+                    <input type="text" name="discordAccount" required ngModel class="form-control">
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Profile Picture </span>
+                    </div>
+                    <div class="custom-file">
+                      <input type="file" accept="image/*" name="profileImage"
+                      (change)="onProfileImageChange($event)"
+                        class="custom-file-input">
+                      <label class="custom-file-label"><span [hidden]="!fileName">{{ fileName }}</span>
+                        <span [hidden]="fileName">Choose File</span>
+                      </label>
+                    </div>
+                </div>
+                <fieldset class="form-group">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input type="checkbox" name="enable" ngModel class="form-check-input" >
+                        Acitve <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                </fieldset>
+                <button type="submit" style="display: none;" id="save-user"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="close-modal" data-dismiss="modal">
+                Close
+            </button>
+            <button type="button" 
+                    class="btn btn-primary"
+                    (click)="onSaveNewUser()" 
+                    [disabled]="newUserForm.invalid"
+            >
+              <i class="fas fa-paper-plane"></i>
+              Add
+            </button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- edit user modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit {{editUser?.firstName}}
+            {{editUser?.lastName}} <small [hidden]="isAdminOrSuperAdmin">(read only) </small></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form #editUserForm="ngForm" (ngSubmit)="updateUser(editUserForm)">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="hidden" ngModel="{{ editUser.id }}" name="id" id="id">
+                    <input type="text" name="firstName" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.firstName }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.lastName }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.username }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.email }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Job<span class="text-danger">*</span></label>
+                    <select class="custom-select" [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.job }}" required name="job">
+                        <option [value]="Job.BACKEND">Backend</option>
+                        <option [value]="Job.FRONTEND">Frontend</option>
+                        <option [value]="Job.DEVOPS">Devops</option>
+                        <option [value]="Job.NETWORK">Network</option>
+                        <option [value]="Job.SECURITY">Security</option>
+                        <option [value]="Job.MANAGER">Manager</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="authority">Role<small [hidden]="isAdminOrSuperAdmin">(read only)</small></label>
+                    <select name="role" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.role }}" class="form-control">
+                        <option value="ROLE_USER">USER</option>
+                        <option value="ROLE_ADMIN">ADMIN</option>
+                        <option value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="text">Discord UserID 
+                        <a href="https://www.remote.tools/remote-work/how-to-find-discord-id">
+                            <small>(Ex : link)</small>
+                        </a>
+                        <span class="text-danger ml-1">* Required to recieve notification</span>
+                    </label>
+                    <input type="text" name="discordAccount" required [disabled]="!isAdminOrSuperAdmin" ngModel="{{ editUser.discordAccount }}" class="form-control">
+                </div>
+                <div class="input-group mb-2 mt-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Profile Picture </span>
+                    </div>
+                    <div class="custom-file">
+                      <input type="file" accept="image/*" name="profileImage" [disabled]="!isAdminOrSuperAdmin" 
+                      (change)="onProfileImageChange($event)"
+                        class="custom-file-input">
+                      <label class="custom-file-label"><span [hidden]="!fileName">{{ fileName }}</span>
+                        <span [hidden]="fileName">Choose File</span>
+                      </label>
+                    </div>
+                </div>
+                <fieldset class="form-group">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                        <input type="checkbox" name="enable" [disabled]="!isSuperAdmin" [(ngModel)]="editUser.enable" class="form-check-input">
+                        Acitve <small [hidden]="isSuperAdmin">(read only)</small>
+                        </label>
+                    </div>
+                </fieldset>
+                <button type="submit" style="display: none;" id="edit-user"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="close-edit-modal" data-dismiss="modal">
+                Close
+            </button>
+            <button type="button" 
+                    class="btn btn-warning"
+                    [disabled]="editUserForm.invalid || !isAdminOrSuperAdmin"
+                    (click)="onUpdateUser()"
+            >
+              <i class="fas fa-paper-plane"></i>
+              Update
+            </button>
+        </div>
+      </div>
+    </div>
+</div>

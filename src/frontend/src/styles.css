@@ -1,0 +1,195 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~ngx-toastr/toastr';
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
+/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'); */
+
+/* list tasks */
+body{
+  background: #edf1f5;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.error-alert {
+  color: #d2364c;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 0 solid transparent;
+  border-radius: 0;
+}
+.card {
+  margin-bottom: 30px;
+}
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.57rem;
+}
+
+.task-has-grid .nav-link {
+  padding: .5rem
+}
+
+.task-has-grid .single-task-item .card {
+  border-radius: 10px
+}
+
+.task-has-grid .single-task-item .feature-task {
+  cursor: pointer
+}
+
+.task-has-grid .single-task-item .side-stick {
+  position: absolute;
+  width: 3px;
+  height: 35px;
+  left: 0;
+  background-color: rgba(82, 95, 127, .5)
+}
+
+.task-has-grid .single-task-item .category-dropdown.dropdown-toggle:after {
+  display: none
+}
+
+.task-has-grid .single-task-item .category [class*=category-] {
+  height: 15px;
+  width: 15px;
+  display: none
+}
+
+.task-has-grid .single-task-item .category [class*=category-]::after {
+  content: "\f0d7";
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: 12px;
+  color: #fff;
+  position: absolute
+}
+
+.task-has-grid .single-task-item .category .category-feature {
+  background-color: rgba(44, 208, 126, .5);
+  border: 2px solid #2cd07e
+}
+
+.task-has-grid .single-task-item .category .category-improv {
+  background-color: #2cabe380;
+  border: 2px solid #2cabe3
+}
+
+.task-has-grid .single-task-item .category .category-bug {
+  background-color: rgba(255, 80, 80, .5);
+  border: 2px solid #ff5050
+}
+
+.task-has-grid .single-task-item .category .category-test {
+  background-color: #ffc107;
+  border: 2px solid #947e3e
+}
+
+.task-has-grid .single-task-item .category .category-cap {
+  background-color: #361a0a;
+  border: 2px solid #644432
+}
+
+.task-has-grid .single-task-item.all-category .point {
+  color: rgba(82, 95, 127, .5)
+}
+
+.task-has-grid .single-task-item.task-improv .point {
+  color: rgba(44, 171, 227, .5)
+}
+
+.task-has-grid .single-task-item.task-improv .side-stick {
+  background-color: rgba(44, 171, 227, .5)
+}
+
+.task-has-grid .single-task-item.task-improv .category .category-improv {
+  display: inline-block
+}
+
+.task-has-grid .single-task-item.task-bug .point {
+  color: rgba(255, 80, 80, .5)
+}
+
+.task-has-grid .single-task-item.task-bug .side-stick {
+  background-color: rgba(255, 80, 80, .5)
+}
+
+.task-has-grid .single-task-item.task-bug .category .category-bug {
+  display: inline-block
+}
+
+.task-has-grid .single-task-item.task-test .point {
+  color: #ffc107
+}
+
+.task-has-grid .single-task-item.task-test .side-stick {
+  background-color: #ffc107
+}
+
+.task-has-grid .single-task-item.task-test .category .category-test {
+  display: inline-block
+}
+
+.task-has-grid .single-task-item.task-feature .point {
+  color: #2cd07e80
+}
+
+.task-has-grid .single-task-item.task-feature .side-stick {
+  background-color: #2cd07e80
+}
+
+.task-has-grid .single-task-item.task-feature .category .category-feature {
+  display: inline-block
+}
+
+.task-has-grid .single-task-item.task-cap .point {
+  color: #44200b
+}
+
+.task-has-grid .single-task-item.task-cap .side-stick {
+  background-color: #44200b
+}
+
+.task-has-grid .single-task-item.task-cap .category .category-cap {
+  display: inline-block
+}
+
+.task-has-grid .single-task-item.all-category .more-options,
+.task-has-grid .single-task-item.all-category.task-feature .more-options {
+  display: block
+}
+
+.task-has-grid .single-task-item.all-category.task-test .more-options,
+.task-has-grid .single-task-item.all-category.task-bug .more-options,
+.task-has-grid .single-task-item.all-category.task-improv .more-options,
+.task-has-grid .single-task-item.all-category.task-cap .more-options,
+.task-has-grid .single-task-item.all-category.task-feature .more-options {
+  display: none
+}
+
+@media (max-width:767.98px) {
+  .task-has-grid .single-task-item {
+    max-width: 100%
+  }
+}
+
+@media (max-width:991.98px) {
+  .task-has-grid .single-task-item {
+    max-width: 216px
+  }
+}
+
+.btn-discord {
+  background-color: #7289DA;
+  border-color: #7289DA;
+  color: #fff;
+}

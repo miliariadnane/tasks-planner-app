@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+    path: /api/v1/task/error
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tasksplanner
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+logging:
+  file:
+    name: ${user.home}/Documents/tasks.log
