@@ -11,9 +11,6 @@
    <img src="https://img.shields.io/github/stars/miliariadnane/tasks-planner"/>
    <img src="https://img.shields.io/github/forks/miliariadnane/tasks-planner"/>
    <img src="https://img.shields.io/static/v1?label=%F0%9F%8C%9F&message=If%20Useful&style=style=flat&color=BC4E99"/>
-   <a href="https://github.com/miliariadnane/tasks-planner/github/workflows/build.yml/badge.svg?branch=main"><img src="https://github.com/miliariadnane/tasks-planner/github/workflows/build.yml/badge.svg?branch=main"/></a>
-   <a href="https://github.com/miliariadnane/tasks-planner/github/workflows/deploy.yml/badge.svg?branch=main"><img src="https://github.com/miliariadnane/tasks-planner/github/workflows/deploy.yml/badge.svg?branch=main"/></a>
-
 </p>
 
 # Overview
