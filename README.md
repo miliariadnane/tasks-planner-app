@@ -10,6 +10,7 @@
    <img src="https://img.shields.io/badge/Framework-SpringBoot-green?style"/>
    <img src="https://img.shields.io/github/stars/miliariadnane/tasks-planner-app"/>
    <img src="https://img.shields.io/github/forks/miliariadnane/tasks-planner-app"/>
+   <img src="https://img.shields.io/static/v1?label=%F0%9F%8C%9F&message=If%20Useful&style=style=flat&color=BC4E99"/>
 </p>
 
 # Overview
