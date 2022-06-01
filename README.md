@@ -22,7 +22,8 @@
 - [new feature upcoming](#upcoming-features)
 
 # Application live
-
+- Super Admin account : nanodev/password123
+- User acccount : miliariadnane/password123
 > [Link to the application](http://tasksplanner-env.eba-pkikrhha.us-east-1.elasticbeanstalk.com/)
 
 # Technologies
