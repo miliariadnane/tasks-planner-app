@@ -323,8 +323,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-danger" id="closeModal" data-dismiss="modal">Discard</button>
-                                    <button type="submit" [disabled]="taskForm.invalid || (isLoading$ | async)" class="btn btn-info">
+                                    <button class="btn btn-danger" id="closeModalEdit" data-dismiss="modal">Discard</button>
+                                    <button type="submit" [disabled]="editTaskForm.invalid || (isLoading$ | async)" class="btn btn-info">
                                         <i *ngIf="isLoading$ | async" class="fas fa-spinner fa-spin"></i>
                                         <span *ngIf="isLoading$ | async">Edit...</span>
                                         <span *ngIf="!(isLoading$ | async)">Edit</span>
