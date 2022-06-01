@@ -95,6 +95,10 @@
    <img src="docs/images/process-diagram.png">
 </p>
 
+# Discord Notification
+
+![discord-notification](https://user-images.githubusercontent.com/52249758/171509317-f43d3104-42a2-4dc6-b0ce-5452d826d5cc.png)
+
 # Upcoming features
 
 - [x] Build & Deploy workflows using Git Actions.
