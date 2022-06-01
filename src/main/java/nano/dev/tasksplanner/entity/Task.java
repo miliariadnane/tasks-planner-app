@@ -47,7 +47,8 @@ public class Task {
 
     @NotNull(message = "Details of the task cannot be null")
     @NotEmpty(message = "Details of the task cannot be empty")
-    @Column(nullable=false, length=250)
+    @Column(nullable=false)
+    @Lob
     private String details;
 
     @Column(nullable=false)
