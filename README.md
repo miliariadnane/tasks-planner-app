@@ -15,9 +15,9 @@
 
 # Overview
 
-- This project is a web app developed with spring Boot (backend) & Angular (frontend).
-- Tasks planner allows planning and managing your tasks with the team and get notifications through discord.
+- Tasks planner is a minimalist collaborative app for planning and managing your tasks with the team and get notifications through discord.
 - Once the task is created by the super admin (project manager), the application notifies affected users that a new task has been created using Discord Webhooks.
+- This project is a web app developed with spring Boot (backend) & Angular (frontend).
 - The workflow is managed by Git Actions  CI/CD in order to automate deployment into AWS (AWS Elastic Beanstalk, RDS and AWS S3).
 - [new feature upcoming](#upcoming-features)
 
