@@ -21,6 +21,18 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
 
+management:
+  trace:
+    http:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
 logging:
   file:
     name: ${user.home}/Documents/tasks.log
