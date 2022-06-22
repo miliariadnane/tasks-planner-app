@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
@@ -25,4 +26,19 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             nativeQuery = true
     )
     Task findByTaskId(@Param("id") long id);
+
+    /* count tasks by type */
+    @Query(
+            value = "select count(*) " +
+                    "from task where type = :type",
+            nativeQuery = true
+    )
+    int countByType(@Param("type") int type);
+
+    @Query(
+            value = "select count(*) " +
+                    "from task where status = :status",
+            nativeQuery = true
+    )
+    int countByStatus(@Param("status") int status);
 }

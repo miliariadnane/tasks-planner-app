@@ -11,10 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Configuration
 public class DbSeeder {
@@ -109,7 +106,6 @@ public class DbSeeder {
             );
 
             taskRepository.saveAll(List.of(task1, task2));
-
         };
 
     }
