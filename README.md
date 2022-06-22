@@ -106,10 +106,10 @@
 - [x] Add security layer (Spring security + JWT).
 - [x] Store user image in aws using s3 bucket.
 - [x] Notify affected users when a task is created via discord.
-- [ ] Complete unit and integration tests.
-- [ ] Notify admin via discord about deployment progress.
-- [ ] Add monitoring dashboard (Spring Actuator).
+- [x] Add monitoring dashboard (Spring Actuator).
 - [ ] Reset password and mailing service by aws.
+- [ ] Notify admin via discord about deployment progress.
+- [ ] Complete unit and integration tests.
 
 # Some commands to run the application
 
