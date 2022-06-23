@@ -2,7 +2,6 @@ package nano.dev.tasksplanner.service;
 
 import nano.dev.tasksplanner.entity.User;
 import nano.dev.tasksplanner.exception.domain.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;

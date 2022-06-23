@@ -37,6 +37,10 @@ export class HeaderComponent implements OnInit {
     return this.getUserRole() === Role.SUPER_ADMIN;
   }
 
+  public get isAdminOrSuperAdmin(): boolean {
+    return this.getUserRole() === Role.ADMIN || this.getUserRole() === Role.SUPER_ADMIN;
+  }
+
   private getUserRole(): string {
     return this.authService.getUserFromLocalCache().role;
   }

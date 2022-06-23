@@ -39,8 +39,8 @@ export class MonitoringComponent implements OnInit {
   public done: number = 0;
   public closed: number = 0;
 
-  dtOptions: DataTables.Settings = {};
-
+  public pageSize = 10;
+  public page = 1;
 
   constructor(
     private monitoringService: MonitoringService,
@@ -48,14 +48,6 @@ export class MonitoringComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5,
-      lengthMenu : [5, 10, 25],
-      processing: true,
-      scrollX: false
-    };
-    
     this.getHttpTraces();
     this.getNumberOfTasksByStatus();
     this.getNumberOfTasksByType();

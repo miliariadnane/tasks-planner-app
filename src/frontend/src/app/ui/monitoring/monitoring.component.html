@@ -102,7 +102,7 @@
 
         <div class="col-sm-6 col-md-6 col-lg-12" style="margin-top: 50px;">
             <h5 class="pull-left">HTTP Traces</h5>
-            <table class="table table-hover text-center bg-white" datatable [dtOptions]="dtOptions">
+            <table class="table table-hover text-center bg-white">
               <thead>
                 <tr>
                   <th>Time Stamp</th>
@@ -114,7 +114,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let httTrace of httpTraceList">
+                <tr *ngFor="let httTrace of httpTraceList | paginate: { 
+                    id: 'http-trace-list',
+                    itemsPerPage: pageSize,
+                    currentPage: page,
+                    totalItems: httpTraceList?.length }"
+                  >
                   <td>{{httTrace?.timestamp | date:'medium'}}</td>
                   <td>{{httTrace?.request.method}}</td>
                   <td>{{httTrace?.timeTaken}}</td>
@@ -132,6 +137,7 @@
                 </tr>
               </tbody>
             </table>
+            <pagination-controls class="text-center" id="http-trace-list" (pageChange)="page = $event"></pagination-controls>
         </div>
     </div>
 </div>

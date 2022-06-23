@@ -1,3 +1,4 @@
+import { ResetPasswordComponent } from './ui/user/reset-password/reset-password.component';
 import { MonitoringComponent } from './ui/monitoring/monitoring.component';
 import { UserProfileComponent } from './ui/user/user-profile/user-profile.component';
 import { LoginComponent } from './ui/auth/login/login.component';
@@ -7,7 +8,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminLayoutsComponent } from './ui/admin-layouts/admin-layouts.component';
 import { ListUsersComponent } from './ui/user/list-users/list-users.component';
-import { ResetPasswordComponent } from './ui/user/reset-password/reset-password.component';
 import { AuthenticatedGuard } from './guard/authenticated.guard';
 
 const routes: Routes = [
