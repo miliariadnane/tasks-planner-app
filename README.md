@@ -107,7 +107,7 @@
 - [x] Store user image in aws using s3 bucket.
 - [x] Notify affected users when a task is created via discord.
 - [x] Add monitoring dashboard (Spring Actuator).
-- [ ] Reset password and mailing service by aws.
+- [x] Reset password and mailing service by aws.
 - [ ] Notify admin via discord about deployment progress.
 - [ ] Complete unit and integration tests.
 
