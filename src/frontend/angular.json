@@ -28,13 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/datatables.net-dt/css/jquery.dataTables.css"
+              "src/styles.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/datatables.net/js/jquery.dataTables.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
