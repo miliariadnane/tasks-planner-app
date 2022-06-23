@@ -7,16 +7,18 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@RequiredArgsConstructor
 public class AWSConfig {
 
-    private final Environment environment;
+    private Environment environment;
+
+    public AWSConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     private static final String ACCESS_KEY_BUCKET = "ACCESS_KEY_BUCKET";
     private static final String SECRET_KEY_BUCKET = "SECRET_KEY_BUCKET";
