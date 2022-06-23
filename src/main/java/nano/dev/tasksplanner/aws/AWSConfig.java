@@ -32,13 +32,13 @@ public class AWSConfig {
     public AmazonS3 s3() {
         return AmazonS3ClientBuilder
                 .standard()
-                .withRegion("us-east-1") // specify the region of yr bucket
+                .withRegion("us-east-1") // the region of bucket
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
 
     @Bean
-    public AmazonSimpleEmailService emailService () {
+    public AmazonSimpleEmailService emailService() {
         return AmazonSimpleEmailServiceClientBuilder
                 .standard()
                 .withRegion("us-east-1")
