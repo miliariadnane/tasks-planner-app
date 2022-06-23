@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   backend:
-      image: "miliariadnane/tasks-planner:23.6.2022.22.56.43"
+      image: "miliariadnane/tasks-planner:23.6.2022.23.33.43"
       ports:
       - "80:8080"
       restart: "always"
