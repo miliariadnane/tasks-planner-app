@@ -77,7 +77,7 @@ public class DbSeeder {
 
             userRepository.saveAll(List.of(admin,superAdmin,user));
 
-            /*
+
             Task task1 = new Task(
                     1L,
                     UUID.randomUUID(),
@@ -105,7 +105,7 @@ public class DbSeeder {
                 LocalDateTime.now(),
                 Set.of(user, admin)
             );
-            */
+
 
             Task task3 = new Task(
                     2L,
@@ -135,8 +135,7 @@ public class DbSeeder {
                     Set.of(user, admin, superAdmin)
             );
 
-            taskRepository.saveAll(List.of(task3, task4));
-//            taskRepository.saveAll(List.of(task1, task2, task3, task4));
+            taskRepository.saveAll(List.of(task1, task2, task3, task4));
         };
 
     }

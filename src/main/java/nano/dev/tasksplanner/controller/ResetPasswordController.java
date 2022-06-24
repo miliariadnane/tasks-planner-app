@@ -1,6 +1,5 @@
 package nano.dev.tasksplanner.controller;
 
-import lombok.AllArgsConstructor;
 import nano.dev.tasksplanner.entity.HttpResponse;
 import nano.dev.tasksplanner.exception.domain.UserNotFoundException;
 import nano.dev.tasksplanner.service.ResetPasswordService;
