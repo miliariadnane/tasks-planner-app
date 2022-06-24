@@ -23,15 +23,12 @@ public class AWSConfig {
     private static final String ACCESS_KEY_BUCKET = "ACCESS_KEY_BUCKET";
     private static final String SECRET_KEY_BUCKET = "SECRET_KEY_BUCKET";
 
-    AWSCredentials awsCredentials = new BasicAWSCredentials(
-//        ACCESS_KEY_BUCKET,
-//        SECRET_KEY_BUCKET
-        environment.getRequiredProperty(ACCESS_KEY_BUCKET),
-        environment.getRequiredProperty(SECRET_KEY_BUCKET)
-    );
-
     @Bean
     public AmazonS3 s3() {
+        AWSCredentials awsCredentials = new BasicAWSCredentials(
+                environment.getRequiredProperty(ACCESS_KEY_BUCKET),
+                environment.getRequiredProperty(SECRET_KEY_BUCKET)
+        );
         return AmazonS3ClientBuilder
                 .standard()
                 .withRegion("us-east-1") // the region of bucket
@@ -41,6 +38,10 @@ public class AWSConfig {
 
     @Bean
     public AmazonSimpleEmailService emailService() {
+        AWSCredentials awsCredentials = new BasicAWSCredentials(
+                environment.getRequiredProperty(ACCESS_KEY_BUCKET),
+                environment.getRequiredProperty(SECRET_KEY_BUCKET)
+        );
         return AmazonSimpleEmailServiceClientBuilder
                 .standard()
                 .withRegion("us-east-1")
