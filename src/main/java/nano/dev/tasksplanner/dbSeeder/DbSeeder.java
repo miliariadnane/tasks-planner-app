@@ -108,7 +108,7 @@ public class DbSeeder {
 
 
             Task task3 = new Task(
-                    2L,
+                    3L,
                     UUID.randomUUID(),
                     "Monitoring dashboard",
                     "Add a monitoring dashboard using spring actuator for http traces, tasks status and other health checks metrics.",
@@ -122,7 +122,7 @@ public class DbSeeder {
             );
 
             Task task4 = new Task(
-                    2L,
+                    4L,
                     UUID.randomUUID(),
                     "Reset password",
                     "Add a reset password feature using aws simple email service.",
