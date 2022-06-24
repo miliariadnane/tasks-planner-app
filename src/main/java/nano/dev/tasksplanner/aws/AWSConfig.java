@@ -24,6 +24,8 @@ public class AWSConfig {
     private static final String SECRET_KEY_BUCKET = "SECRET_KEY_BUCKET";
 
     AWSCredentials awsCredentials = new BasicAWSCredentials(
+//        ACCESS_KEY_BUCKET,
+//        SECRET_KEY_BUCKET
         environment.getRequiredProperty(ACCESS_KEY_BUCKET),
         environment.getRequiredProperty(SECRET_KEY_BUCKET)
     );
