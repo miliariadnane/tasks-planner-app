@@ -95,10 +95,6 @@
    <img src="docs/images/process-diagram.png">
 </p>
 
-# Discord Notification
-
-![discord-notification](https://user-images.githubusercontent.com/52249758/171509317-f43d3104-42a2-4dc6-b0ce-5452d826d5cc.png)
-
 # Upcoming features
 
 - [x] Build & Deploy workflows using Git Actions.
@@ -110,6 +106,38 @@
 - [x] Reset password and mailing service by aws.
 - [ ] Notify admin via discord about deployment progress.
 - [ ] Complete unit and integration tests.
+
+# ScreenShots
+
+* Tasks List :
+<p align="center">
+  <img src="docs/screenshots/tasks-list.png">
+</p>
+
+* Add new Task (Form) :
+<p align="center">
+  <img src="docs/screenshots/new-task.png">
+</p>
+
+* Users List :
+<p align="center">
+  <img src="docs/screenshots/users-list.png">
+</p>
+
+* Discord Notification :
+<p align="center">
+  <img src="docs/screenshots/discord-notification.png">
+</p>
+
+* Reset user password :
+<p align="center">
+  <img src="docs/screenshots/reset-password.png">
+</p>
+
+* Monitoring Dashboard :
+<p align="center">
+  <img src="docs/screenshots/monitoring-dashboard.png">
+</p>
 
 # Some commands to run the application
 

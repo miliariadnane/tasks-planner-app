@@ -56,7 +56,7 @@ public class DbSeeder {
                     Job.DEVOPS,
                     "admin",
                     role_admin,
-                    getRoleEnumName(role_super_admin).getAuthorities(),
+                    getRoleEnumName(role_admin).getAuthorities(),
                     true
             );
 
@@ -71,7 +71,7 @@ public class DbSeeder {
                     Job.BACKEND,
                     "miliariadnane",
                     role_user,
-                    getRoleEnumName(role_super_admin).getAuthorities(),
+                    getRoleEnumName(role_user).getAuthorities(),
                     true
             );
 
